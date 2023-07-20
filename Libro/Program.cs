@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
-builder.Services.AddScoped<IBookRepository, BookMockRepository>();
+builder.Services.AddSingleton<IBookRepository, BookMockRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 builder.Services

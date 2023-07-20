@@ -69,6 +69,7 @@ namespace Libro.Controllers
             }
 
             book.IsReserved = true;
+            book.AvailabilityStatus = false;
 
             return Ok("Book reserved successfully.");
         }
