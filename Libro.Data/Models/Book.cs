@@ -8,6 +8,7 @@
         public string Genre { get; set; }
         public DateTime PublicationDate { get; set; }
         public bool AvailabilityStatus { get; set; }
+        public bool IsReserved { get; set; }
 
         public List<Author> Authors { get; set; }
 

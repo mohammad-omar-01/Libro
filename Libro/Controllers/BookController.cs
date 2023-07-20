@@ -28,23 +28,49 @@ namespace Libro.Controllers
                 .GetAllBooks()
                 .Where(b => b.AvailabilityStatus)
                 .ToList();
-
-            return Ok(availableBooks);
+            if (availableBooks.Count > 0)
+            {
+                return Ok(availableBooks);
+            }
+            else
+                return NoContent();
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            Book book = _bookRepository.GetBookById(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            else
+
+                return Ok(book);
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value) { }
+        [HttpPost("{bookId}/reserve")]
+        public IActionResult ReserveBook(int bookId)
+        {
+            Book book = _bookRepository.GetBookById(bookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value) { }
+            if (!book.AvailabilityStatus)
+            {
+                return BadRequest("The book is not available for reservation.");
+            }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id) { }
+            if (book.IsReserved)
+            {
+                return BadRequest("The book is already reserved.");
+            }
+
+            book.IsReserved = true;
+
+            return Ok("Book reserved successfully.");
+        }
     }
 }
