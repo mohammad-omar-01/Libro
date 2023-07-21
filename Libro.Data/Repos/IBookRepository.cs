@@ -7,6 +7,5 @@ public interface IBookRepository
     List<Book> GetAllBooks();
     Book GetBookById(int bookId);
     void UpdateBook(Book updatedBook);
-    void AddBookCopy(int bookId, bool isAvailable)
-
+    void AddBookCopy(int bookId, bool isAvailable);
 }

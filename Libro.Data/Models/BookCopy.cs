@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Libro.Data.Models
+﻿namespace Libro.Data.Models
 {
-    internal class BookCopies
+    public class BookCopy
     {
+        public int CopyId { get; set; }
+        public int BookId { get; set; }
+        public bool IsAvailable { get; set; }
+
+        public BookCopy(int copyId, int bookId, bool isAvailable = true)
+        {
+            CopyId = copyId;
+            BookId = bookId;
+            IsAvailable = isAvailable;
+        }
     }
 }
