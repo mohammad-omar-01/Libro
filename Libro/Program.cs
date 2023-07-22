@@ -1,5 +1,6 @@
 using Libro.Data.Mappers;
 using Libro.Data.Repos;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -13,6 +14,10 @@ builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 builder.Services.AddSingleton<IBookRepository, BookMockRepository>();
 builder.Services.AddSingleton<IUserRepository, UserMockRepository>();
 builder.Services.AddSingleton<IAdminRepository, AdminRepository>();
+builder.Services.AddDbContext<LibroDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 

@@ -57,7 +57,6 @@ public class BookMockRepository : IBookRepository
         if (existingBook != null)
         {
             existingBook.Title = updatedBook.Title;
-            existingBook.ISBN = updatedBook.ISBN;
             existingBook.Genre = updatedBook.Genre;
             existingBook.PublicationDate = updatedBook.PublicationDate;
             existingBook.AvailabilityStatus = updatedBook.AvailabilityStatus;
@@ -102,5 +101,15 @@ public class BookMockRepository : IBookRepository
     public List<Book> GetAllBooks()
     {
         return books;
+    }
+
+    public BookCopy ReserveCopy(Book book)
+    {
+        var copy = book.Copies.FirstOrDefault(copy => copy.IsAvailable);
+
+        if (copy != null)
+            book.Copies.ElementAt(book.Copies.IndexOf(copy)).IsAvailable = false;
+
+        return copy;
     }
 }

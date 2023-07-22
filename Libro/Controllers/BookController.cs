@@ -26,7 +26,7 @@ namespace Libro.Controllers
         {
             List<Book> availableBooks = _bookRepository
                 .GetAllBooks()
-                .Where(b => b.AvailabilityStatus)
+                .Where(b => b.AnyCopiesAvailable())
                 .ToList();
             if (availableBooks.Count > 0)
             {
@@ -58,17 +58,12 @@ namespace Libro.Controllers
                 return NotFound();
             }
 
-            if (!book.AvailabilityStatus)
+            if (!book.AnyCopiesAvailable())
             {
                 return BadRequest("The book is not available for reservation.");
             }
 
-            if (book.IsReserved)
-            {
-                return BadRequest("The book is already reserved.");
-            }
-
-            book.IsReserved = true;
+            var copyToReserve = book.Copies.FirstOrDefault(copy => copy.IsAvailable);
             book.AvailabilityStatus = false;
 
             return Ok("Book reserved successfully.");
