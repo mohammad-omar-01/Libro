@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 builder.Services.AddSingleton<IBookRepository, BookMockRepository>();
-builder.Services.AddSingleton<IUserRepository, UserMockRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<IAdminRepository, AdminRepository>();
 builder.Services.AddDbContext<LibroDbContext>(options =>
 {

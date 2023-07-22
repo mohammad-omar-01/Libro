@@ -24,7 +24,7 @@ namespace Libro.Data.Repos
 
         public Book GetBookById(int bookId)
         {
-            return _dbContext.Books.Find(bookId);
+            return _dbContext.Books.FirstOrDefault(book=>book.BookID==bookId);
         }
 
         public List<Book> GetAllBooks()

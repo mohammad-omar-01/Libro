@@ -78,38 +78,11 @@ public class BookMockRepository : IBookRepository
         return books.FirstOrDefault(b => b.BookID == bookId);
     }
 
-    public void AddBookCopy(int bookId, bool isAvailable)
-    {
-        Book book = books.FirstOrDefault(b => b.BookID == bookId);
-
-        if (book == null)
-        {
-            throw new ArgumentException("Book with specified ID not found.");
-        }
-
-        int copyId = GenerateNewCopyId(bookId);
-        BookCopy newCopy = new BookCopy(copyId, bookId, isAvailable);
-        book.Copies.Add(newCopy);
-    }
-
-    private int GenerateNewCopyId(int bookId)
-    {
-        return bookId + (random.Next(20));
-        ;
-    }
 
     public List<Book> GetAllBooks()
     {
         return books;
     }
 
-    public BookCopy ReserveCopy(Book book)
-    {
-        var copy = book.Copies.FirstOrDefault(copy => copy.IsAvailable);
 
-        if (copy != null)
-            book.Copies.ElementAt(book.Copies.IndexOf(copy)).IsAvailable = false;
-
-        return copy;
-    }
 }

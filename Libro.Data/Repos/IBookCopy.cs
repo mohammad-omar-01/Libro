@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Libro.Data.Repos
 {
-    internal interface IBookCopy
+    public interface IBookCopy
     {
+
     }
 }

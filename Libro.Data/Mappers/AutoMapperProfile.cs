@@ -24,6 +24,7 @@ namespace Libro.Data.Mappers
                 .ForMember(dest => dest.BookID, opt => opt.MapFrom(src => src.BookID))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.BookName));
             CreateMap<User, SignupRequestDTO>();
+            CreateMap<SignupRequestDTO, User>();
         }
     }
 }
