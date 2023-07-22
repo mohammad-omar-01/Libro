@@ -4,11 +4,29 @@ namespace Libro.Data.Repos
 {
     public class UserMockRepository : IUserRepository
     {
-        private readonly List<User> users;
-
-        public UserMockRepository()
+        private readonly List<User> users = new List<User>
         {
-            users = new List<User>();
+            new User
+            {
+                ID = 1,
+                Username = "MoOmar",
+                Password = "omar123",
+                Role = UserRole.Patron
+            },
+            new User
+            {
+                ID = 2,
+                Username = "AhmadOmar",
+                Password = "ahmad123",
+                Role = UserRole.Admin
+            },
+        };
+
+        public UserMockRepository() { }
+
+        public User GetUserById(int id)
+        {
+            return users.FirstOrDefault(user => user.ID == id);
         }
 
         public void RegisterUser(string username, string password)
@@ -40,16 +58,6 @@ namespace Libro.Data.Repos
             return user;
         }
 
-        public void AssignUserRole(User user, UserRole role)
-        {
-            if (user.Role != UserRole.Admin)
-            {
-                throw new InvalidOperationException("Only administrators can assign roles.");
-            }
-
-            user.Role = role;
-        }
-
         private int GenerateNewUserId()
         {
             return users.Count + 1;
@@ -58,6 +66,14 @@ namespace Libro.Data.Repos
         public bool IsUsernameTaken(string username)
         {
             return users.Any(u => u.Username == username);
+        }
+
+        public User AuthenticateUser(string username, string password)
+        {
+            // Find the user by username and password (replace this with your actual user lookup logic)
+            var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
+
+            return user;
         }
     }
 }
