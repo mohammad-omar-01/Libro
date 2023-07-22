@@ -13,7 +13,7 @@ namespace Libro.Data.Models
         public int BookId { get; set; }
         public bool IsAvailable { get; set; }
 
-        public BookCopy(int copyId, int bookId, bool isAvailable = true)
+        public BookCopy(int copyId = 1, int bookId = 1, bool isAvailable = true)
         {
             CopyId = copyId;
             BookId = bookId;
