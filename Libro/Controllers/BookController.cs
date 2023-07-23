@@ -8,10 +8,12 @@ namespace Libro.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, IAuthorRepository authorRepository)
         {
             _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
         }
 
         [HttpGet]
@@ -47,6 +49,22 @@ namespace Libro.Controllers
             else
 
                 return Ok(book);
+        }
+
+        [HttpPut("{bookId}/authors/{authorId}")]
+        public IActionResult AddAuthorToBook(int bookId, int authorId)
+        {
+            var book = _bookRepository.GetBookById(bookId);
+            var author = _authorRepository.GetAuthorById(authorId);
+
+            if (book == null || author == null)
+            {
+                return NotFound();
+            }
+
+            _bookRepository.AddAuthorToBook(book.BookID, author.AuthorID);
+
+            return Ok();
         }
 
         [HttpPost("{bookId}/reserve")]

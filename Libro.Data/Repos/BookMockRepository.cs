@@ -78,11 +78,13 @@ public class BookMockRepository : IBookRepository
         return books.FirstOrDefault(b => b.BookID == bookId);
     }
 
-
     public List<Book> GetAllBooks()
     {
         return books;
     }
 
-
+    public bool AddAuthorToBook(int book, int author)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -8,4 +8,5 @@ public interface IBookRepository
     Book GetBookById(int bookId);
     void UpdateBook(Book updatedBook);
 
+    bool AddAuthorToBook(int bookId, int authorId);
 }

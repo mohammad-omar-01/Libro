@@ -24,7 +24,7 @@ namespace Libro.Data.Repos
 
         public Book GetBookById(int bookId)
         {
-            return _dbContext.Books.FirstOrDefault(book=>book.BookID==bookId);
+            return _dbContext.Books.FirstOrDefault(book => book.BookID == bookId);
         }
 
         public List<Book> GetAllBooks()
@@ -46,6 +46,20 @@ namespace Libro.Data.Repos
                 _dbContext.Books.Remove(book);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public bool AddAuthorToBook(int bookId, int authorId)
+        {
+            var author = _dbContext.Authors.FirstOrDefault(author => author.AuthorID == authorId);
+            var book = _dbContext.Books.FirstOrDefault(book => book.BookID == bookId);
+            if (book != null)
+            {
+                book.Authors.Add(author);
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+            return false;
         }
     }
 }
