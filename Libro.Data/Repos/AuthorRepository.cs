@@ -1,58 +1,50 @@
 ﻿using Libro.Data.Models;
 
-public class AuthorMockRepository
+namespace Libro.Data.Repos
 {
-    private List<Author> authors;
-    private int authorIdCounter;
-
-    public AuthorMockRepository()
+    public class AuthorRepository : IAuthorRepository
     {
-        authors = new List<Author>();
-        authorIdCounter = 1;
+        private readonly LibroDbContext _dbContext;
 
-        AddSampleData();
-    }
-
-    private void AddSampleData()
-    {
-        Author author1 = new Author { AuthorID = authorIdCounter++, Name = "Jane Austen" };
-        Author author2 = new Author { AuthorID = authorIdCounter++, Name = "Charles Dickens" };
-
-        authors.Add(author1);
-        authors.Add(author2);
-    }
-
-    public void AddAuthor(Author author)
-    {
-        author.AuthorID = authorIdCounter++;
-        authors.Add(author);
-    }
-
-    public void UpdateAuthor(Author updatedAuthor)
-    {
-        Author existingAuthor = GetAuthorById(updatedAuthor.AuthorID);
-        if (existingAuthor != null)
+        public AuthorRepository(LibroDbContext dbContext)
         {
+            _dbContext = dbContext;
+        }
+
+        public void AddAuthor(Author author)
+        {
+            _dbContext.Authors.Add(author);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteAuthor(int authorId)
+        {
+            _dbContext.Authors.Remove(GetAuthorById(authorId));
+            _dbContext.SaveChanges();
+        }
+
+        public List<Author> GetAllAuthors()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Author GetAuthorById(int authorId)
+        {
+            return _dbContext.Authors.FirstOrDefault(author => author.AuthorID == authorId);
+        }
+
+        public void UpdateAuthor(Author updatedAuthor)
+        {
+            var existingAuthor = _dbContext.Authors.Find(updatedAuthor.AuthorID);
+
+            if (existingAuthor == null)
+            {
+                throw new ArgumentException("Author not found");
+            }
+
             existingAuthor.Name = updatedAuthor.Name;
+
+            _dbContext.SaveChanges();
         }
-    }
-
-    public void DeleteAuthor(int authorId)
-    {
-        Author authorToRemove = GetAuthorById(authorId);
-        if (authorToRemove != null)
-        {
-            authors.Remove(authorToRemove);
-        }
-    }
-
-    public Author GetAuthorById(int authorId)
-    {
-        return authors.FirstOrDefault(a => a.AuthorID == authorId);
-    }
-
-    public List<Author> GetAllAuthors()
-    {
-        return authors;
     }
 }
