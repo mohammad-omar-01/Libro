@@ -62,6 +62,14 @@ builder.Services.AddAuthorization(options =>
             policy.RequireClaim("Role", "Admin");
         }
     );
+    options.AddPolicy(
+        "MustBePatron",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("Role", "Patron");
+        }
+    );
 });
 var app = builder.Build();
 

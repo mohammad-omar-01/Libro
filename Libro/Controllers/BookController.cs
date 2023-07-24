@@ -84,7 +84,8 @@ namespace Libro.Controllers
         }
 
         [HttpPost("{bookId}/reserve")]
-        public IActionResult ReserveBook(int bookId)
+        [Authorize(Policy = "MustBePatron")]
+        public ActionResult<BookReservationDTO> ReserveBook(int bookId)
         {
             Book book = _bookRepository.GetBookById(bookId);
             if (book == null)
@@ -92,15 +93,14 @@ namespace Libro.Controllers
                 return NotFound();
             }
 
-            if (!book.AnyCopiesAvailable())
+            if (!_bookCopyRepository.AnyCopyAvalaible(bookId))
             {
                 return BadRequest("The book is not available for reservation.");
             }
 
-            var copyToReserve = book.Copies.FirstOrDefault(copy => copy.IsAvailable);
-            book.AvailabilityStatus = false;
+            var copyToReserve = _bookCopyRepository.ReserveAcopy(bookId);
 
-            return Ok("Book reserved successfully.");
+            return Ok(copyToReserve);
         }
     }
 }
