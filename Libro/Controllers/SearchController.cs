@@ -36,7 +36,7 @@ public class SearchController : ControllerBase
 
             return Ok(books);
         }
-        List<BookDTO> bookDTOs = _mapper.Map<List<BookDTO>>(books);
+        List<BookSearchDTO> bookDTOs = _mapper.Map<List<BookSearchDTO>>(books);
 
         return Ok(bookDTOs);
     }

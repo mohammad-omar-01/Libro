@@ -25,7 +25,9 @@ namespace Libro.Data.Repos
 
         public Book GetBookById(int bookId)
         {
-            return _dbContext.Books.FirstOrDefault(book => book.BookID == bookId);
+            return _dbContext.Books
+                .Include(b => b.Authors)
+                .FirstOrDefault(book => book.BookID == bookId);
         }
 
         public List<Book> GetAllBooks(int pageNumber, int pageSize)
@@ -33,6 +35,7 @@ namespace Libro.Data.Repos
             int recordsToSkip = (pageNumber - 1) * pageSize;
 
             var paginatedBooks = _dbContext.Books
+                .Include(b => b.Authors)
                 .OrderBy(b => b.BookID)
                 .Skip(recordsToSkip)
                 .Take(pageSize)

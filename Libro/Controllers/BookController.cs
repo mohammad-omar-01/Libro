@@ -1,26 +1,41 @@
-﻿using Libro.Data.Models;
+﻿using AutoMapper;
+using Libro.Data.DTOs;
+using Libro.Data.Models;
+using Libro.Data.Repos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libro.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class BookController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IBookCopy _bookCopyRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly IMapper _mapper;
 
-        public BookController(IBookRepository bookRepository, IAuthorRepository authorRepository)
+        public BookController(
+            IBookRepository bookRepository,
+            IAuthorRepository authorRepository,
+            IBookCopy bookCopy,
+            IMapper mapper
+        )
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
+            _bookCopyRepository = bookCopy;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetBooks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1)
         {
             List<Book> books = _bookRepository.GetAllBooks(pageNumber, pageSize);
-            return Ok(books);
+            var dtoBooks = _mapper.Map<List<BookSearchDTO>>(books);
+            return Ok(dtoBooks);
         }
 
         [HttpGet("available")]
@@ -28,11 +43,12 @@ namespace Libro.Controllers
         {
             List<Book> availableBooks = _bookRepository
                 .GetAllBooks()
-                .Where(b => b.AnyCopiesAvailable())
+                .Where(book => _bookCopyRepository.AnyCopyAvalaible(book.BookID))
                 .ToList();
             if (availableBooks.Count > 0)
             {
-                return Ok(availableBooks);
+                var availableBookDto = _mapper.Map<BookSearchDTO>(availableBooks);
+                return Ok(availableBookDto);
             }
             else
                 return NoContent();
@@ -46,9 +62,9 @@ namespace Libro.Controllers
             {
                 return NotFound();
             }
-            else
+            var bookDto = _mapper.Map<BookSearchDTO>(book);
 
-                return Ok(book);
+            return Ok(bookDto);
         }
 
         [HttpPut("{bookId}/authors/{authorId}")]

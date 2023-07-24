@@ -3,6 +3,7 @@ using Libro.Data.DTOs;
 using Libro.Data.Mappers;
 using Libro.Data.Models;
 using Libro.Data.Repos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
