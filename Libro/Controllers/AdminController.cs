@@ -30,6 +30,7 @@ namespace Libro.Controllers
             UserRole userRole;
             Enum.TryParse<UserRole>(role, out userRole);
             user = _adminRepository.AssignUserRole(user, userRole);
+
             return Ok(user);
         }
     }
