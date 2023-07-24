@@ -1,4 +1,5 @@
 ﻿using Libro.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,17 @@ namespace Libro.Data.Repos
             return _dbContext.Books.FirstOrDefault(book => book.BookID == bookId);
         }
 
-        public List<Book> GetAllBooks()
+        public List<Book> GetAllBooks(int pageNumber, int pageSize)
         {
-            return _dbContext.Books.ToList();
+            int recordsToSkip = (pageNumber - 1) * pageSize;
+
+            var paginatedBooks = _dbContext.Books
+                .OrderBy(b => b.BookID)
+                .Skip(recordsToSkip)
+                .Take(pageSize)
+                .ToList();
+
+            return paginatedBooks;
         }
 
         public void UpdateBook(Book book)
@@ -60,6 +69,11 @@ namespace Libro.Data.Repos
                 return true;
             }
             return false;
+        }
+
+        public List<Book> GetAllBooks()
+        {
+            return _dbContext.Books.ToList();
         }
     }
 }
