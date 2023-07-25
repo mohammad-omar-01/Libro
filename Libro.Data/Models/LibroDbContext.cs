@@ -8,7 +8,7 @@ public class LibroDbContext : DbContext
     public DbSet<BookCopy> BookCopies { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Transction> Transactions { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
 
     public LibroDbContext(DbContextOptions<LibroDbContext> options)

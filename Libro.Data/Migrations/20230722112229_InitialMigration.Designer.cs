@@ -123,7 +123,7 @@ namespace Libro.Data.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("Libro.Data.Models.Transaction", b =>
+            modelBuilder.Entity("Libro.Data.Models.Transction", b =>
                 {
                     b.Property<int>("TransactionId")
                         .ValueGeneratedOnAdd()

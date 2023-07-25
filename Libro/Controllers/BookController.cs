@@ -4,6 +4,8 @@ using Libro.Data.Models;
 using Libro.Data.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
 
 namespace Libro.Controllers
 {
@@ -97,8 +99,9 @@ namespace Libro.Controllers
             {
                 return BadRequest("The book is not available for reservation.");
             }
+            var patronId = int.Parse(User.FindFirstValue("ID"));
 
-            var copyToReserve = _bookCopyRepository.ReserveAcopy(bookId);
+            var copyToReserve = _bookCopyRepository.ReserveAcopy(bookId, patronId);
 
             return Ok(copyToReserve);
         }

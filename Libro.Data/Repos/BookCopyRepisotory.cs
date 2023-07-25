@@ -1,6 +1,7 @@
 ﻿using Libro.Data.DTOs;
 using Libro.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Libro.Data.Repos
 {
@@ -20,7 +21,12 @@ namespace Libro.Data.Repos
                 .Any(bookCopy => bookCopy.IsAvailable == true);
         }
 
-        public BookReservationDTO ReserveAcopy(int BookId)
+        public BookCopy GetBookCopy(int copyId)
+        {
+            return _dbContext.BookCopies.FirstOrDefault(copy => copy.CopyId == copyId);
+        }
+
+        public BookReservationDTO ReserveAcopy(int BookId, int patronId)
         {
             var rertivedBook = _dbContext.Books
                 .Include(b => b.Copies)
@@ -33,8 +39,11 @@ namespace Libro.Data.Repos
             {
                 return null;
             }
+
             var copy = rertivedBook.Copies.FirstOrDefault(bookCopy => bookCopy.IsAvailable == true);
             copy.IsAvailable = false;
+            Reservation reservation = new Reservation(copy.CopyId, patronId, DateTime.Now);
+            _dbContext.Reservations.Add(reservation);
             _dbContext.SaveChangesAsync();
 
             BookReservationDTO copyDto = new BookReservationDTO(

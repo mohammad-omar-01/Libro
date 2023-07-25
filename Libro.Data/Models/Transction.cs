@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Libro.Data.Models
 {
-    public class Transaction
+    public class Transction
     {
+        public Transction() { }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionId { get; set; }
@@ -22,5 +19,13 @@ namespace Libro.Data.Models
 
         public DateTime Borrowdate { get; set; }
         public DateTime ReturnDate { get; set; }
+
+        public Transction(int bookCopyId, int patronId, DateTime borrowdate, DateTime returnDate)
+        {
+            BookCopyId = bookCopyId;
+            PatronId = patronId;
+            Borrowdate = borrowdate;
+            ReturnDate = returnDate;
+        }
     }
 }

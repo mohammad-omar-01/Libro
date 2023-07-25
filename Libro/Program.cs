@@ -16,6 +16,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBookCopy, BookCopyRepisotory>();
+builder.Services.AddScoped<ITransaction, TransactionRepository>();
+builder.Services.AddScoped<IReservation, ReservationRepoisotory>();
 
 builder.Services.AddDbContext<LibroDbContext>(options =>
 {
@@ -68,6 +70,14 @@ builder.Services.AddAuthorization(options =>
         {
             policy.RequireAuthenticatedUser();
             policy.RequireClaim("Role", "Patron");
+        }
+    );
+    options.AddPolicy(
+        "MustBeLibrarian",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("Role", "Librarian");
         }
     );
 });
