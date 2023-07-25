@@ -40,6 +40,15 @@ namespace Libro.Data.Repos
             _dbContext.SaveChanges();
         }
 
+        public List<Transction> GetOverdueBooks()
+        {
+            var currentDate = DateTime.Now;
+
+            return _dbContext.Transactions
+                .Where(t => t.DueDate < currentDate && t.ReturnDate == null)
+                .ToList();
+        }
+
         public void AddTransaction(Transction transaction)
         {
             _dbContext.Transactions.Add(transaction);

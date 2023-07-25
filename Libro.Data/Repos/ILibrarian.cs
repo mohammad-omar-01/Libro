@@ -1,4 +1,5 @@
 ﻿using Libro.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Libro.Data.Repos
 {
@@ -8,5 +9,6 @@ namespace Libro.Data.Repos
         void DeleteTransaction(int transactionID);
         void UpdateTransaction(Transction transaction);
         public void AcceptReturnedBook(int transactionId);
+        public List<Transction> GetOverdueBooks();
     }
 }

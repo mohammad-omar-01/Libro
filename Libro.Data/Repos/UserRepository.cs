@@ -11,10 +11,10 @@ namespace Libro.Data.Repos
             _dbContext = dbContext;
         }
 
-        public User? AuthenticateUser(string username, string password)
+        public User AuthenticateUser(string username, string password)
         {
-            return _dbContext.Users.SingleOrDefault(
-                u => u.Username == username && u.Password == password
+            return _dbContext.Users.FirstOrDefault(
+                u => u.Username.Equals(username) && u.Password.Equals(password)
             );
         }
 

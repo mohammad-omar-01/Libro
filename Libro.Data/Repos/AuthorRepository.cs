@@ -11,6 +11,17 @@ namespace Libro.Data.Repos
             _dbContext = dbContext;
         }
 
+        public void AddBookToAuthor(int bookId, int authorId)
+        {
+            var author = _dbContext.Authors.FirstOrDefault(a => a.AuthorID == authorId);
+            var book = _dbContext.Books.FirstOrDefault(a => a.BookID == bookId);
+            if (book != null)
+            {
+                author.Books.Add(book);
+                _dbContext.SaveChanges();
+            }
+        }
+
         public void AddAuthor(Author author)
         {
             _dbContext.Authors.Add(author);

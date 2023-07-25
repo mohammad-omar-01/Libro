@@ -18,14 +18,17 @@ namespace Libro.Data.Models
         public int PatronId { get; set; }
 
         public DateTime Borrowdate { get; set; }
+        public DateTime DueDate { get; set; }
+
         public DateTime? ReturnDate { get; set; }
 
-        public Transction(int bookCopyId, int patronId, DateTime borrowdate, DateTime returnDate)
+        public Transction(int bookCopyId, int patronId, DateTime borrowdate, DateTime? returnDate)
         {
             BookCopyId = bookCopyId;
             PatronId = patronId;
             Borrowdate = borrowdate;
             ReturnDate = returnDate;
+            DueDate = borrowdate.AddDays(14);
         }
     }
 }

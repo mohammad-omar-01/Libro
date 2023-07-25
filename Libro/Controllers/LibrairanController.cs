@@ -4,6 +4,8 @@ using Libro.Data.Models;
 using Libro.Data.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace Libro.Controllers
 {
@@ -54,7 +56,7 @@ namespace Libro.Controllers
                 if (reservationForPatron.Any(b => b.BookCopyId == checkoutDTO.BookCopyId))
                 {
                     DateTime checkoutDate = DateTime.Now;
-                    DateTime returnDate = DateTime.Now.AddMonths(1);
+                    DateTime? returnDate = null;
 
                     Transction transaction = new Transction(
                         bookCopy.BookId,
@@ -62,6 +64,7 @@ namespace Libro.Controllers
                         checkoutDate,
                         returnDate
                     );
+                    transaction.DueDate = checkoutDate.AddDays(14);
                     _librarianRepository.AddTransaction(transaction);
                     return Created("Book checked out successfully!\n", transaction);
                 }
@@ -78,6 +81,7 @@ namespace Libro.Controllers
                     checkoutDate,
                     returnDate
                 );
+                transaction.DueDate = DateTime.Now.AddDays(14);
                 _librarianRepository.AddTransaction(transaction);
                 return Ok("Book checked out successfully!");
             }
@@ -101,6 +105,17 @@ namespace Libro.Controllers
             {
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [Authorize(Policy = "MustBeLibrarian")]
+        [HttpGet("GetOverdueBooks")]
+        public ActionResult<List<Transction>> GetOverdueBooks()
+        {
+            var currentDate = DateTime.Now;
+
+            var overdueBooks = _librarianRepository.GetOverdueBooks();
+
+            return overdueBooks;
         }
     }
 }

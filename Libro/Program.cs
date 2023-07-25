@@ -23,7 +23,6 @@ builder.Services.AddDbContext<LibroDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 builder.Services
