@@ -16,7 +16,7 @@ namespace Libro.Controllers
         private readonly IReservation _reservationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly ITransaction _transactionRepository;
+        private readonly ILibrarian _librarianRepository;
 
         public LibrairanController(
             IBookRepository bookRepository,
@@ -24,7 +24,7 @@ namespace Libro.Controllers
             IBookCopy bookCopy,
             IMapper mapper,
             IReservation reservation,
-            ITransaction transaction
+            ILibrarian transaction
         )
         {
             _bookRepository = bookRepository;
@@ -32,7 +32,7 @@ namespace Libro.Controllers
             _bookCopyRepository = bookCopy;
             _mapper = mapper;
             _reservationRepository = reservation;
-            _transactionRepository = transaction;
+            _librarianRepository = transaction;
         }
 
         [Authorize(Policy = "MustBeLibrarian")]
@@ -62,7 +62,7 @@ namespace Libro.Controllers
                         checkoutDate,
                         returnDate
                     );
-                    _transactionRepository.AddTransaction(transaction);
+                    _librarianRepository.AddTransaction(transaction);
                     return Created("Book checked out successfully!\n", transaction);
                 }
                 return BadRequest("Book is Reserved!");
@@ -71,17 +71,36 @@ namespace Libro.Controllers
             if (bookCopy.IsAvailable)
             {
                 DateTime checkoutDate = DateTime.Now;
-                DateTime returnDate = DateTime.Now.AddMonths(1);
+                DateTime returnDate = new DateTime();
                 Transction transaction = new Transction(
                     bookCopy.BookId,
                     patron.ID,
                     checkoutDate,
                     returnDate
                 );
-                _transactionRepository.AddTransaction(transaction);
+                _librarianRepository.AddTransaction(transaction);
                 return Ok("Book checked out successfully!");
             }
             return BadRequest("Book is already checked out!");
+        }
+
+        [Authorize(Policy = "MustBeLibrarian")]
+        [HttpPost("AcceptReturnedBook/{transactionId}")]
+        public IActionResult AcceptReturnedBook(int transactionId)
+        {
+            try
+            {
+                _librarianRepository.AcceptReturnedBook(transactionId);
+                return Ok("Book returned successfully and made available for other patrons.");
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
         }
     }
 }

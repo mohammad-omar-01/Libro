@@ -7,13 +7,37 @@ using System.Threading.Tasks;
 
 namespace Libro.Data.Repos
 {
-    public class TransactionRepository : ITransaction
+    public class LibrarianRepository : ILibrarian
     {
         private readonly LibroDbContext _dbContext;
 
-        public TransactionRepository(LibroDbContext dbContext)
+        public LibrarianRepository(LibroDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public void AcceptReturnedBook(int transactionId)
+        {
+            var transaction = _dbContext.Transactions.FirstOrDefault(
+                t => t.TransactionId == transactionId
+            );
+
+            if (transaction == null)
+            {
+                throw new ArgumentException("Transaction not found.");
+            }
+
+            transaction.ReturnDate = DateTime.Now;
+
+            var bookCopy = _dbContext.BookCopies.FirstOrDefault(
+                bc => bc.CopyId == transaction.BookCopyId
+            );
+
+            if (bookCopy != null)
+            {
+                bookCopy.IsAvailable = true;
+            }
+            _dbContext.SaveChanges();
         }
 
         public void AddTransaction(Transction transaction)
