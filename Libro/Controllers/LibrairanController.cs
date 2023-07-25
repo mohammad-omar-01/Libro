@@ -18,7 +18,7 @@ namespace Libro.Controllers
         private readonly IReservation _reservationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly ILibrarian _librarianRepository;
+        private readonly ITransaction _librarianRepository;
 
         public LibrairanController(
             IBookRepository bookRepository,
@@ -26,7 +26,7 @@ namespace Libro.Controllers
             IBookCopy bookCopy,
             IMapper mapper,
             IReservation reservation,
-            ILibrarian transaction
+            ITransaction transaction
         )
         {
             _bookRepository = bookRepository;

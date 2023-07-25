@@ -1,4 +1,5 @@
-﻿using Libro.Data.Models;
+﻿using Libro.Data.DTOs;
+using Libro.Data.Models;
 
 namespace Libro.Data.Repos
 {
@@ -69,6 +70,11 @@ namespace Libro.Data.Repos
             var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
 
             return user;
+        }
+
+        public PatronProfileDTO GetPatronProfileById(int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
