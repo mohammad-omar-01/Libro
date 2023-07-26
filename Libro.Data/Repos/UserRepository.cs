@@ -96,7 +96,7 @@ namespace Libro.Data.Repos
                 .ToList();
             foreach (var transaction in transactions)
             {
-                foreach (var borrowing in borrowings)
+                foreach (var borrowing in patronProfileUpdateDTO.BorrowingHistory)
                 {
                     if (borrowing.BookTransactionId == transaction.TransactionId)
                     {
