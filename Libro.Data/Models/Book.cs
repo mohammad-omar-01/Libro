@@ -16,6 +16,7 @@ namespace Libro.Data.Models
 
         [NotMapped]
         public virtual bool AvailabilityStatus { get; set; }
+
         public List<Author> Authors { get; set; }
         public List<BookCopy> Copies { get; set; }
 
