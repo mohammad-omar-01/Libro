@@ -76,5 +76,15 @@ namespace Libro.Data.Repos
         {
             throw new NotImplementedException();
         }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePatronProfile(PatronProfileUpdateDTO patronProfileUpdateDTO)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -10,5 +10,7 @@ namespace Libro.Data.Repos
         public User AuthenticateUser(string username, string password);
         public User GetUserById(int id);
         public PatronProfileDTO GetPatronProfileById(int userId);
+        public void UpdatePatronProfile(PatronProfileUpdateDTO patronProfileUpdateDTO);
+        public void SaveChanges();
     }
 }

@@ -21,6 +21,10 @@ namespace Libro.Data.Mappers
 
             CreateMap<User, SignupRequestDTO>();
             CreateMap<SignupRequestDTO, User>();
+            CreateMap<BorrowingHistoryDTO, BookBorrowingHistroyUpdateDTO>();
+            CreateMap<BookBorrowingHistroyUpdateDTO, BorrowingHistoryDTO>();
+            CreateMap<PatronProfileDTO, PatronProfileUpdateDTO>();
+            CreateMap<PatronProfileUpdateDTO, PatronProfileDTO>();
         }
     }
 }

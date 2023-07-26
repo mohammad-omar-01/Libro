@@ -2,7 +2,6 @@
 using Libro.Data.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Libro.Controllers
 {
@@ -35,6 +34,18 @@ namespace Libro.Controllers
             var patronProfile = _userRepository.GetPatronProfileById(userId);
 
             return Ok(patronProfile);
+        }
+
+        [HttpPut("Profile/{patronId}")]
+        [Authorize(Policy = "MustNotBePatron")]
+        public ActionResult UpdatePatronProfile(
+            int patronId,
+            [FromBody] PatronProfileUpdateDTO patronProfileDTO
+        )
+        {
+            _userRepository.UpdatePatronProfile(patronProfileDTO);
+
+            return Ok("Patron profile updated successfully.");
         }
     }
 }

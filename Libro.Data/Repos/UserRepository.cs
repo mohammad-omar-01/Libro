@@ -1,4 +1,5 @@
-﻿using Libro.Data.DTOs;
+﻿using AutoMapper;
+using Libro.Data.DTOs;
 using Libro.Data.Models;
 
 namespace Libro.Data.Repos
@@ -6,10 +7,12 @@ namespace Libro.Data.Repos
     public class UserRepository : IUserRepository
     {
         private readonly LibroDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public UserRepository(LibroDbContext dbContext)
+        public UserRepository(LibroDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public User AuthenticateUser(string username, string password)
@@ -35,6 +38,11 @@ namespace Libro.Data.Repos
             return _dbContext.Users.Find(id);
         }
 
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
+        }
+
         public PatronProfileDTO GetPatronProfileById(int userId)
         {
             var user = GetUserById(userId);
@@ -45,6 +53,7 @@ namespace Libro.Data.Repos
                 borrowings.Add(
                     new BorrowingHistoryDTO
                     {
+                        BookTransactionId = transaction.TransactionId,
                         BookCopyID = transaction.BookCopyId,
                         BookBorrowDate = transaction.Borrowdate,
                         BookReturnDate = transaction.ReturnDate,
@@ -70,6 +79,34 @@ namespace Libro.Data.Repos
             };
 
             return patronProfileDTO;
+        }
+
+        public void UpdatePatronProfile(PatronProfileUpdateDTO patronProfileUpdateDTO)
+        {
+            var borrowings = GetPatronProfileById(patronProfileUpdateDTO.PatronId).BorrowingHistory;
+            foreach (var borrow in borrowings)
+            {
+                patronProfileUpdateDTO.BorrowingHistory.ForEach(
+                    b => b.BookTransactionId = borrow.BookTransactionId
+                );
+            }
+
+            var transactions = _dbContext.Transactions
+                .Where(a => a.PatronId == patronProfileUpdateDTO.PatronId)
+                .ToList();
+            foreach (var transaction in transactions)
+            {
+                foreach (var borrowing in borrowings)
+                {
+                    if (borrowing.BookTransactionId == transaction.TransactionId)
+                    {
+                        transaction.Borrowdate = borrowing.BookBorrowDate.Value;
+                        transaction.ReturnDate = borrowing.BookReturnDate;
+                        transaction.BookCopyId = borrowing.BookCopyID;
+                    }
+                }
+            }
+            _dbContext.SaveChanges();
         }
     }
 }

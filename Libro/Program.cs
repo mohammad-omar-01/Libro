@@ -72,6 +72,14 @@ builder.Services.AddAuthorization(options =>
         }
     );
     options.AddPolicy(
+        "MustNotBePatron",
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("Role", "Admin", "Librarian");
+        }
+    );
+    options.AddPolicy(
         "MustBeLibrarian",
         policy =>
         {
