@@ -1,43 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using AutoMapper;
+using Libro.Data.DTOs;
+using Libro.Data.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Libro.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        // GET: api/<AuthorController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IAuthorRepository _authorRepository;
+        private readonly IMapper _mapper;
+
+        public AuthorController(IAuthorRepository authorRepository, IMapper mapper)
         {
-            return new string[] { "value1", "value2" };
+            _authorRepository = authorRepository;
+            _mapper = mapper;
         }
 
-        // GET api/<AuthorController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<AuthorController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Policy = "MustNotBePatron")]
+        public ActionResult<AuthorDTO> AddAuthor([FromBody] AuthorDTO authorDTO)
         {
+            var authorToAdd = _mapper.Map<Author>(authorDTO);
+            _authorRepository.AddAuthor(authorToAdd);
+            var createdAuthorDTO = _mapper.Map<AuthorDTO>(authorToAdd);
+            return Created("Author created successfully", createdAuthorDTO);
         }
 
-        // PUT api/<AuthorController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Policy = "MustNotBePatron")]
+        public IActionResult EditAuthor(int id, [FromBody] AuthorDTO authorDTO)
         {
+            var author = _mapper.Map<Author>(authorDTO);
+            _authorRepository.UpdateAuthor(author);
+
+            return Ok("Author updated successfully.");
         }
 
-        // DELETE api/<AuthorController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Policy = "MustNotBePatron")]
+        public IActionResult DeleteAuthor(int id)
         {
+            _authorRepository.DeleteAuthor(id);
+
+            return Ok();
         }
     }
 }

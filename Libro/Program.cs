@@ -18,6 +18,7 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBookCopy, BookCopyRepisotory>();
 builder.Services.AddScoped<ITransaction, TransactionRepository>();
 builder.Services.AddScoped<IReservation, ReservationRepoisotory>();
+builder.Services.AddSingleton<IAesEncryptionUtility, AesEncryptionUtility>();
 
 builder.Services.AddDbContext<LibroDbContext>(options =>
 {

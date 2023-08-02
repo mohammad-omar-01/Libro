@@ -8,22 +8,36 @@ namespace Libro.Data.Repos
     {
         private readonly LibroDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IAesEncryptionUtility _aesEncryptionUtility;
 
-        public UserRepository(LibroDbContext dbContext, IMapper mapper)
+        public UserRepository(
+            LibroDbContext dbContext,
+            IMapper mapper,
+            IAesEncryptionUtility aesEncryptionUtility
+        )
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _aesEncryptionUtility = aesEncryptionUtility;
         }
 
         public User AuthenticateUser(string username, string password)
         {
-            return _dbContext.Users.FirstOrDefault(
-                u => u.Username.Equals(username) && u.Password.Equals(password)
-            );
+            var user = _dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
+            if (user == null)
+            {
+                return null;
+            }
+            if (_aesEncryptionUtility.Encrypt(password) == user.Password)
+            {
+                return user;
+            }
+            return null;
         }
 
         public void RegisterUser(User user)
         {
+            user.Password = _aesEncryptionUtility.Encrypt(user.Password);
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
         }

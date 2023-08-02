@@ -17,16 +17,19 @@ public class Authintication : ControllerBase
     private readonly IUserRepository userRepository;
     private readonly IConfiguration _configratuion;
     private readonly IMapper _mapper;
+    private readonly IAesEncryptionUtility aesEncryptionUtility;
 
     public Authintication(
         IUserRepository userRepository,
         IConfiguration configuration,
-        IMapper mapper
+        IMapper mapper,
+        IAesEncryptionUtility encryptionUtility
     )
     {
         this.userRepository = userRepository;
         _configratuion = configuration;
         _mapper = mapper;
+        aesEncryptionUtility = encryptionUtility;
     }
 
     [HttpPost("signup")]
