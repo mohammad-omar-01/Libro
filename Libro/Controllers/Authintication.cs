@@ -74,7 +74,7 @@ public class Authintication : ControllerBase
             _configratuion["Authentication:Audience"],
             claimsForToken,
             DateTime.UtcNow,
-            DateTime.UtcNow.AddDays(1),
+            DateTime.UtcNow.AddHours(3),
             signingCredentials
         );
 
