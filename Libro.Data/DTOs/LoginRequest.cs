@@ -1,6 +1,6 @@
 ﻿namespace Libro.Data.DTOs
 {
-    public class SignupRequestDTO
+    public class LoginRequest
     {
         public string Username { get; set; }
         public string Password { get; set; }
