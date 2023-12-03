@@ -87,4 +87,9 @@ public class BookMockRepository : IBookRepository
     {
         throw new NotImplementedException();
     }
+
+    public List<Book> GetAllBooks(int pageNumber, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
 }

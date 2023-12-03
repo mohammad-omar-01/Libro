@@ -17,9 +17,9 @@ namespace Libro.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetBooks()
+        public IActionResult GetBooks([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1)
         {
-            List<Book> books = _bookRepository.GetAllBooks();
+            List<Book> books = _bookRepository.GetAllBooks(pageNumber, pageSize);
             return Ok(books);
         }
 
