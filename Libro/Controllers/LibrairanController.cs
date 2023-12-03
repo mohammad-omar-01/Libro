@@ -13,26 +13,21 @@ namespace Libro.Controllers
     [ApiController]
     public class LibrairanController : ControllerBase
     {
-        private readonly IBookRepository _bookRepository;
         private readonly IBookCopy _bookCopyRepository;
         private readonly IReservation _reservationRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly ILibrarian _librarianRepository;
+        private readonly ITransaction _librarianRepository;
 
         public LibrairanController(
             IBookRepository bookRepository,
             IUserRepository userRepository,
             IBookCopy bookCopy,
-            IMapper mapper,
             IReservation reservation,
-            ILibrarian transaction
+            ITransaction transaction
         )
         {
-            _bookRepository = bookRepository;
             _userRepository = userRepository;
             _bookCopyRepository = bookCopy;
-            _mapper = mapper;
             _reservationRepository = reservation;
             _librarianRepository = transaction;
         }

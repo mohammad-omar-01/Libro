@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Libro.Data.Repos
 {
-    public class LibrarianRepository : ILibrarian
+    public class TransactionRepository : ITransaction
     {
         private readonly LibroDbContext _dbContext;
 
-        public LibrarianRepository(LibroDbContext dbContext)
+        public TransactionRepository(LibroDbContext dbContext)
         {
             _dbContext = dbContext;
         }

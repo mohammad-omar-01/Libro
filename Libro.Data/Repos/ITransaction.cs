@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Libro.Data.Repos
 {
-    public interface ILibrarian
+    public interface ITransaction
     {
         void AddTransaction(Transction transaction);
         void DeleteTransaction(int transactionID);
