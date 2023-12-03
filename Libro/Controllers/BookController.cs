@@ -4,6 +4,7 @@ using Libro.Data.Models;
 using Libro.Data.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Claims;
 
@@ -104,6 +105,35 @@ namespace Libro.Controllers
             var copyToReserve = _bookCopyRepository.ReserveAcopy(bookId, patronId);
 
             return Ok(copyToReserve);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Librarian")]
+        public ActionResult<BookDTO> AddBook([FromBody] BookDTO bookDTO)
+        {
+            var bookToAdd = _mapper.Map<Book>(bookDTO);
+            _bookRepository.AddBook(bookToAdd);
+            var createdBookDTO = _mapper.Map<BookDTO>(bookToAdd);
+            return Created("Created Succefully", createdBookDTO);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Policy = "MustNotBePatron")]
+        public IActionResult EditBook(int id, [FromBody] BookDTO bookDTO)
+        {
+            var book = _mapper.Map<Book>(bookDTO);
+            _bookRepository.UpdateBook(book);
+
+            return Ok("Book updated successfully.");
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "MustNotBePatron")]
+        public IActionResult DeletetBook(int id)
+        {
+            _bookRepository.DeleteBook(id);
+
+            return Ok();
         }
     }
 }
