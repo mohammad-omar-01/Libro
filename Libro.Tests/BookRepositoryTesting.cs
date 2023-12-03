@@ -16,7 +16,6 @@ public class BookMockRepositoryTests
         Book newBook = new Book
         {
             Title = "Test Book",
-            ISBN = "1234567890",
             Genre = "Test Genre",
             PublicationDate = DateTime.Now,
             AvailabilityStatus = true
@@ -38,7 +37,6 @@ public class BookMockRepositoryTests
             {
                 BookID = existingBook.BookID,
                 Title = "Updated Title",
-                ISBN = "0987654321",
                 Genre = "Updated Genre",
                 PublicationDate = existingBook.PublicationDate,
                 AvailabilityStatus = existingBook.AvailabilityStatus
@@ -48,7 +46,6 @@ public class BookMockRepositoryTests
 
             Book updatedBookFromRepository = bookRepository.GetBookById(existingBook.BookID);
             Assert.Equal("Updated Title", updatedBookFromRepository.Title);
-            Assert.Equal("0987654321", updatedBookFromRepository.ISBN);
             Assert.Equal("Updated Genre", updatedBookFromRepository.Genre);
         }
     }

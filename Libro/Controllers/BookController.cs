@@ -8,10 +8,12 @@ namespace Libro.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, IAuthorRepository authorRepository)
         {
             _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
         }
 
         [HttpGet]
@@ -26,7 +28,7 @@ namespace Libro.Controllers
         {
             List<Book> availableBooks = _bookRepository
                 .GetAllBooks()
-                .Where(b => b.AvailabilityStatus)
+                .Where(b => b.AnyCopiesAvailable())
                 .ToList();
             if (availableBooks.Count > 0)
             {
@@ -49,6 +51,22 @@ namespace Libro.Controllers
                 return Ok(book);
         }
 
+        [HttpPut("{bookId}/authors/{authorId}")]
+        public IActionResult AddAuthorToBook(int bookId, int authorId)
+        {
+            var book = _bookRepository.GetBookById(bookId);
+            var author = _authorRepository.GetAuthorById(authorId);
+
+            if (book == null || author == null)
+            {
+                return NotFound();
+            }
+
+            _bookRepository.AddAuthorToBook(book.BookID, author.AuthorID);
+
+            return Ok();
+        }
+
         [HttpPost("{bookId}/reserve")]
         public IActionResult ReserveBook(int bookId)
         {
@@ -58,17 +76,12 @@ namespace Libro.Controllers
                 return NotFound();
             }
 
-            if (!book.AvailabilityStatus)
+            if (!book.AnyCopiesAvailable())
             {
                 return BadRequest("The book is not available for reservation.");
             }
 
-            if (book.IsReserved)
-            {
-                return BadRequest("The book is already reserved.");
-            }
-
-            book.IsReserved = true;
+            var copyToReserve = book.Copies.FirstOrDefault(copy => copy.IsAvailable);
             book.AvailabilityStatus = false;
 
             return Ok("Book reserved successfully.");

@@ -29,14 +29,16 @@ namespace Libro.Data.Repos
             return users.FirstOrDefault(user => user.ID == id);
         }
 
-        public void RegisterUser(string username, string password)
+        public void RegisterUser(User user)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (
+                string.IsNullOrWhiteSpace(user.Username) || string.IsNullOrWhiteSpace(user.Password)
+            )
             {
                 throw new ArgumentException("Username and password cannot be empty.");
             }
 
-            if (users.Any(u => u.Username == username))
+            if (users.Any(u => u.Username == user.Username))
             {
                 throw new InvalidOperationException("Username already exists.");
             }
@@ -44,18 +46,12 @@ namespace Libro.Data.Repos
             User newUser = new User
             {
                 ID = GenerateNewUserId(),
-                Username = username,
-                Password = password,
-                Role = UserRole.Patron
+                Username = user.Username,
+                Password = user.Password,
+                Role = user.Role
             };
 
             users.Add(newUser);
-        }
-
-        public User Login(string username, string password)
-        {
-            User user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
-            return user;
         }
 
         private int GenerateNewUserId()
@@ -70,7 +66,6 @@ namespace Libro.Data.Repos
 
         public User AuthenticateUser(string username, string password)
         {
-            // Find the user by username and password (replace this with your actual user lookup logic)
             var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
 
             return user;

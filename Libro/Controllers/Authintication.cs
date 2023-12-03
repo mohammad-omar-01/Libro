@@ -1,4 +1,7 @@
-﻿using Libro.Data.DTOs;
+﻿using AutoMapper;
+using Libro.Data.DTOs;
+using Libro.Data.Mappers;
+using Libro.Data.Models;
 using Libro.Data.Repos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,11 +15,17 @@ public class Authintication : ControllerBase
 {
     private readonly IUserRepository userRepository;
     private readonly IConfiguration _configratuion;
+    private readonly IMapper _mapper;
 
-    public Authintication(IUserRepository userRepository, IConfiguration configuration)
+    public Authintication(
+        IUserRepository userRepository,
+        IConfiguration configuration,
+        IMapper mapper
+    )
     {
         this.userRepository = userRepository;
         _configratuion = configuration;
+        _mapper = mapper;
     }
 
     [HttpPost("signup")]
@@ -31,8 +40,9 @@ public class Authintication : ControllerBase
         {
             return Conflict("Username is already taken.");
         }
+        User tmpUser = _mapper.Map<User>(signupRequest);
 
-        userRepository.RegisterUser(signupRequest.Username, signupRequest.Password);
+        userRepository.RegisterUser(tmpUser);
 
         return Ok("Signup successful.");
     }

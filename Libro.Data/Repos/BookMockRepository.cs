@@ -57,7 +57,6 @@ public class BookMockRepository : IBookRepository
         if (existingBook != null)
         {
             existingBook.Title = updatedBook.Title;
-            existingBook.ISBN = updatedBook.ISBN;
             existingBook.Genre = updatedBook.Genre;
             existingBook.PublicationDate = updatedBook.PublicationDate;
             existingBook.AvailabilityStatus = updatedBook.AvailabilityStatus;
@@ -79,28 +78,13 @@ public class BookMockRepository : IBookRepository
         return books.FirstOrDefault(b => b.BookID == bookId);
     }
 
-    public void AddBookCopy(int bookId, bool isAvailable)
-    {
-        Book book = books.FirstOrDefault(b => b.BookID == bookId);
-
-        if (book == null)
-        {
-            throw new ArgumentException("Book with specified ID not found.");
-        }
-
-        int copyId = GenerateNewCopyId(bookId);
-        BookCopy newCopy = new BookCopy(copyId, bookId, isAvailable);
-        book.Copies.Add(newCopy);
-    }
-
-    private int GenerateNewCopyId(int bookId)
-    {
-        return bookId + (random.Next(20));
-        ;
-    }
-
     public List<Book> GetAllBooks()
     {
         return books;
+    }
+
+    public bool AddAuthorToBook(int book, int author)
+    {
+        throw new NotImplementedException();
     }
 }
