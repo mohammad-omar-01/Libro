@@ -1,14 +1,17 @@
 ﻿using Libro.Data.Models;
+using System.Security.Cryptography;
 
 public class BookMockRepository : IBookRepository
 {
     private List<Book> books;
     private int bookIdCounter;
+    private Random random;
 
     public BookMockRepository()
     {
         books = new List<Book>();
         bookIdCounter = 1;
+        random = new Random();
 
         AddSampleData();
     }
@@ -74,6 +77,26 @@ public class BookMockRepository : IBookRepository
     public Book GetBookById(int bookId)
     {
         return books.FirstOrDefault(b => b.BookID == bookId);
+    }
+
+    public void AddBookCopy(int bookId, bool isAvailable)
+    {
+        Book book = books.FirstOrDefault(b => b.BookID == bookId);
+
+        if (book == null)
+        {
+            throw new ArgumentException("Book with specified ID not found.");
+        }
+
+        int copyId = GenerateNewCopyId(bookId);
+        BookCopy newCopy = new BookCopy(copyId, bookId, isAvailable);
+        book.Copies.Add(newCopy);
+    }
+
+    private int GenerateNewCopyId(int bookId)
+    {
+        return bookId + (random.Next(20));
+        ;
     }
 
     public List<Book> GetAllBooks()
