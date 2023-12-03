@@ -51,23 +51,6 @@ namespace Libro.Data.Migrations
                     b.HasKey("AuthorID");
 
                     b.ToTable("Authors");
-
-                    b.HasData(
-                        new
-                        {
-                            AuthorID = 1,
-                            Name = "Author 1"
-                        },
-                        new
-                        {
-                            AuthorID = 2,
-                            Name = "Author 2"
-                        },
-                        new
-                        {
-                            AuthorID = 3,
-                            Name = "Author 3"
-                        });
                 });
 
             modelBuilder.Entity("Libro.Data.Models.Book", b =>
@@ -92,29 +75,6 @@ namespace Libro.Data.Migrations
                     b.HasKey("BookID");
 
                     b.ToTable("Books");
-
-                    b.HasData(
-                        new
-                        {
-                            BookID = 1,
-                            Genre = "Genre 1",
-                            PublicationDate = new DateTime(2023, 7, 16, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9170),
-                            Title = "Book 1"
-                        },
-                        new
-                        {
-                            BookID = 2,
-                            Genre = "Genre 2",
-                            PublicationDate = new DateTime(2023, 7, 9, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9211),
-                            Title = "Book 2"
-                        },
-                        new
-                        {
-                            BookID = 3,
-                            Genre = "Genre 3",
-                            PublicationDate = new DateTime(2023, 7, 2, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9214),
-                            Title = "Book 3"
-                        });
                 });
 
             modelBuilder.Entity("Libro.Data.Models.BookCopy", b =>
@@ -136,38 +96,6 @@ namespace Libro.Data.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("BookCopies");
-
-                    b.HasData(
-                        new
-                        {
-                            CopyId = 1,
-                            BookId = 1,
-                            IsAvailable = false
-                        },
-                        new
-                        {
-                            CopyId = 2,
-                            BookId = 1,
-                            IsAvailable = true
-                        },
-                        new
-                        {
-                            CopyId = 3,
-                            BookId = 2,
-                            IsAvailable = false
-                        },
-                        new
-                        {
-                            CopyId = 4,
-                            BookId = 2,
-                            IsAvailable = true
-                        },
-                        new
-                        {
-                            CopyId = 5,
-                            BookId = 3,
-                            IsAvailable = false
-                        });
                 });
 
             modelBuilder.Entity("Libro.Data.Models.Reservation", b =>
@@ -192,7 +120,7 @@ namespace Libro.Data.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("Libro.Data.Models.Transaction", b =>
+            modelBuilder.Entity("Libro.Data.Models.Transction", b =>
                 {
                     b.Property<int>("TransactionId")
                         .ValueGeneratedOnAdd()
@@ -206,10 +134,13 @@ namespace Libro.Data.Migrations
                     b.Property<DateTime>("Borrowdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PatronId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("TransactionId");
@@ -242,7 +173,7 @@ namespace Libro.Data.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -251,28 +182,6 @@ namespace Libro.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            DateJoined = new DateTime(2023, 6, 23, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9257),
-                            Email = "",
-                            Name = "Musab",
-                            Password = "password1",
-                            Role = "Patron",
-                            Username = "user1"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            DateJoined = new DateTime(2023, 7, 3, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9262),
-                            Email = "",
-                            Name = "Mazen",
-                            Password = "password2",
-                            Role = "Admin",
-                            Username = "user2"
-                        });
                 });
 
             modelBuilder.Entity("AuthorBook", b =>

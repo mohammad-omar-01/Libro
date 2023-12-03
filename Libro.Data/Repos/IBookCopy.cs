@@ -6,6 +6,7 @@ namespace Libro.Data.Repos
     public interface IBookCopy
     {
         bool AnyCopyAvalaible(int bookID);
-        BookReservationDTO ReserveAcopy(int bookId);
+        BookCopy GetBookCopy(int copyId);
+        BookReservationDTO ReserveAcopy(int bookId, int patronId);
     }
 }

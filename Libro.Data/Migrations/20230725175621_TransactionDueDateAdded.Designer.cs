@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Libro.Data.Migrations
 {
     [DbContext(typeof(LibroDbContext))]
-    [Migration("20230722112229_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230725175621_TransactionDueDateAdded")]
+    partial class TransactionDueDateAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,10 +137,13 @@ namespace Libro.Data.Migrations
                     b.Property<DateTime>("Borrowdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PatronId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("TransactionId");
@@ -171,8 +174,9 @@ namespace Libro.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()

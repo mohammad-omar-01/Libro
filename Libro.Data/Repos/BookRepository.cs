@@ -1,4 +1,6 @@
-﻿using Libro.Data.Models;
+﻿using AutoMapper;
+using Libro.Data.DTOs;
+using Libro.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,7 +48,14 @@ namespace Libro.Data.Repos
 
         public void UpdateBook(Book book)
         {
-            _dbContext.Books.Update(book);
+            var bookToUpdate = _dbContext.Books
+                .Include(b => b.Authors)
+                .FirstOrDefault(b => b.BookID == book.BookID);
+
+            bookToUpdate.Title = book.Title;
+            bookToUpdate.Genre = book.Genre;
+            bookToUpdate.PublicationDate = book.PublicationDate;
+
             _dbContext.SaveChanges();
         }
 

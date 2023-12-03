@@ -1,14 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Libro.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateUserEnittySeedData : Migration
+    public partial class SeedDataAgain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,15 +87,6 @@ namespace Libro.Data.Migrations
                         "password2",
                         "Admin",
                         "user2"
-                    },
-                    {
-                        3,
-                        new DateTime(2023, 7, 3, 0, 43, 28, 46, DateTimeKind.Local).AddTicks(9262),
-                        "Mohammad@gmail.com",
-                        "Mohammad",
-                        "123",
-                        "Librarian",
-                        "MoOmar"
                     }
                 }
             );
